@@ -12,6 +12,7 @@ const Quiz = () => {
     difficultyLevel,
     currentQuestionIndex,
     totalQuestions,
+    answers,
     answerQuestion,
     nextQuestion,
   } = useQuiz();
@@ -20,6 +21,17 @@ const Quiz = () => {
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [isAnswered, setIsAnswered] = useState(false);
   const navigate = useNavigate();
+
+  // Load the user's previous answer for this question if it exists
+  useEffect(() => {
+    if (answers[currentQuestionIndex]) {
+      setSelectedAnswer(answers[currentQuestionIndex]);
+      setIsAnswered(true);
+    } else {
+      setSelectedAnswer(null);
+      setIsAnswered(false);
+    }
+  }, [currentQuestionIndex, answers]);
 
   useEffect(() => {
     if (selectedLanguages.length === 0) {
@@ -57,6 +69,11 @@ const Quiz = () => {
     }
   };
 
+  // Handle direct navigation to results page
+  const handleViewResults = () => {
+    navigate('/results');
+  };
+
   if (!currentQuestion) {
     return (
       <div className="min-h-screen bg-white flex items-center justify-center">
@@ -65,14 +82,25 @@ const Quiz = () => {
     );
   }
 
+  // Calculate progress
+  const progress = Math.round(((currentQuestionIndex + 1) / totalQuestions) * 100);
+
   return (
     <div className="min-h-screen bg-white flex flex-col items-center justify-center p-4">
       <Card className="w-full max-w-2xl border border-quiz-lightgray">
         <CardHeader className="text-center">
           <CardTitle className="text-2xl font-bold text-quiz-green">Language Learning Quiz</CardTitle>
-          <p className="text-sm text-gray-500">
-            Question {currentQuestionIndex + 1} of {totalQuestions}
-          </p>
+          <div className="flex flex-col items-center gap-2">
+            <p className="text-sm text-gray-500">
+              Question {currentQuestionIndex + 1} of {totalQuestions}
+            </p>
+            <div className="w-full bg-gray-200 rounded-full h-2 max-w-md">
+              <div
+                className="h-2 rounded-full bg-quiz-green"
+                style={{ width: `${progress}%` }}
+              ></div>
+            </div>
+          </div>
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="text-center">
@@ -99,16 +127,26 @@ const Quiz = () => {
               ))}
             </div>
             
-            {isAnswered && (
-              <div className="mt-6">
+            <div className="mt-6 flex justify-between">
+              {isAnswered && (
                 <Button 
                   onClick={handleNext}
                   className="bg-quiz-green hover:bg-quiz-lightgreen text-white"
                 >
                   {currentQuestionIndex === totalQuestions - 1 ? 'View Results' : 'Next Question'}
                 </Button>
-              </div>
-            )}
+              )}
+              
+              {currentQuestionIndex > 0 && !isAnswered && (
+                <Button
+                  variant="outline"
+                  onClick={handleViewResults}
+                  className="ml-auto"
+                >
+                  Skip to Results
+                </Button>
+              )}
+            </div>
           </div>
         </CardContent>
       </Card>

@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useQuiz } from '@/context/QuizContext';
@@ -35,15 +36,25 @@ const Results = () => {
       totalQuestions
     );
 
+    // Make sure we're only counting valid answers that were submitted
     let correctAnswers = 0;
+    let answeredQuestions = 0;
+    
     Object.entries(answers).forEach(([index, answer]) => {
       const questionIndex = parseInt(index);
-      if (quizQuestions[questionIndex] && quizQuestions[questionIndex].correctAnswer === answer) {
-        correctAnswers++;
+      if (quizQuestions[questionIndex]) {
+        answeredQuestions++;
+        if (quizQuestions[questionIndex].correctAnswer === answer) {
+          correctAnswers++;
+        }
       }
     });
 
+    console.log('Answered questions:', answeredQuestions, 'out of', totalQuestions);
+    console.log('Correct answers:', correctAnswers);
+    
     setScore(correctAnswers);
+    // Calculate percentage based on total questions, not just answered ones
     const calculatedPercentage = Math.round((correctAnswers / totalQuestions) * 100);
     setPercentage(calculatedPercentage);
 
