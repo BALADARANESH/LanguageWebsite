@@ -6,6 +6,7 @@ import { useAuth } from '@/context/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { getQuestionsForLanguages } from '@/data/quizQuestions';
+import { supabase } from '@/integrations/supabase/client';
 
 const Results = () => {
   const { user } = useAuth();
@@ -19,6 +20,8 @@ const Results = () => {
 
   const [score, setScore] = useState(0);
   const [percentage, setPercentage] = useState(0);
+  const [isSaving, setIsSaving] = useState(false);
+  const [savedResult, setSavedResult] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -42,21 +45,40 @@ const Results = () => {
     });
 
     setScore(correctAnswers);
-    setPercentage(Math.round((correctAnswers / totalQuestions) * 100));
+    const calculatedPercentage = Math.round((correctAnswers / totalQuestions) * 100);
+    setPercentage(calculatedPercentage);
 
-    // In a real app with Supabase, we would save the results here
-    if (user) {
-      console.log("Saving quiz results for user:", user.id);
-      console.log("Quiz results:", {
-        languages: selectedLanguages,
-        difficulty: difficultyLevel,
-        score: correctAnswers,
-        totalQuestions,
-        percentage: Math.round((correctAnswers / totalQuestions) * 100),
-        date: new Date().toISOString(),
-      });
-    }
-  }, [selectedLanguages, difficultyLevel, totalQuestions, answers, navigate, user]);
+    // Save results to Supabase
+    const saveResult = async () => {
+      if (!user || savedResult) return;
+      
+      setIsSaving(true);
+      try {
+        const { data, error } = await supabase
+          .from('quiz_results')
+          .insert({
+            user_id: user.id,
+            languages: selectedLanguages,
+            difficulty: difficultyLevel,
+            score: correctAnswers,
+            total_questions: totalQuestions,
+            percentage: calculatedPercentage
+          });
+
+        if (error) {
+          console.error('Error saving quiz result:', error);
+        } else {
+          setSavedResult(true);
+        }
+      } catch (err) {
+        console.error('Exception saving quiz result:', err);
+      } finally {
+        setIsSaving(false);
+      }
+    };
+
+    saveResult();
+  }, [selectedLanguages, difficultyLevel, totalQuestions, answers, navigate, user, savedResult]);
 
   const handlePlayAgain = () => {
     resetQuiz();
