@@ -7,6 +7,8 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { getQuestionsForLanguages } from '@/data/quizQuestions';
 import { supabase } from '@/integrations/supabase/client';
+import { Progress } from '@/components/ui/progress';
+import { toast } from 'sonner';
 
 const Results = () => {
   const { user } = useAuth();
@@ -30,22 +32,36 @@ const Results = () => {
       return;
     }
 
+    // Get the questions that were used in the quiz
     const quizQuestions = getQuestionsForLanguages(
       selectedLanguages,
       difficultyLevel,
       totalQuestions
     );
 
-    // Make sure we're only counting valid answers that were submitted
+    // Count correct answers
     let correctAnswers = 0;
     let answeredQuestions = 0;
     
-    Object.entries(answers).forEach(([index, answer]) => {
-      const questionIndex = parseInt(index);
-      if (quizQuestions[questionIndex]) {
+    // Debug logging
+    console.log('User answers:', answers);
+    console.log('Quiz questions:', quizQuestions);
+    
+    Object.entries(answers).forEach(([questionIndexStr, userAnswer]) => {
+      const questionIndex = parseInt(questionIndexStr);
+      if (questionIndex < quizQuestions.length) {
+        const question = quizQuestions[questionIndex];
         answeredQuestions++;
-        if (quizQuestions[questionIndex].correctAnswer === answer) {
+        
+        // Debug logs for each answer
+        console.log(`Question ${questionIndex}:`, question.question);
+        console.log(`User answer: "${userAnswer}", Correct answer: "${question.correctAnswer}"`);
+        
+        if (question.correctAnswer === userAnswer) {
           correctAnswers++;
+          console.log(`Question ${questionIndex} is correct!`);
+        } else {
+          console.log(`Question ${questionIndex} is incorrect.`);
         }
       }
     });
@@ -53,12 +69,12 @@ const Results = () => {
     console.log('Answered questions:', answeredQuestions, 'out of', totalQuestions);
     console.log('Correct answers:', correctAnswers);
     
+    // Update state with calculated values
     setScore(correctAnswers);
-    // Calculate percentage based on total questions, not just answered ones
     const calculatedPercentage = Math.round((correctAnswers / totalQuestions) * 100);
     setPercentage(calculatedPercentage);
 
-    // Save results to Supabase
+    // Save results to Supabase if user is logged in
     const saveResult = async () => {
       if (!user || savedResult) return;
       
@@ -77,17 +93,23 @@ const Results = () => {
 
         if (error) {
           console.error('Error saving quiz result:', error);
+          toast.error('Failed to save your result');
         } else {
           setSavedResult(true);
+          toast.success('Quiz result saved!');
         }
       } catch (err) {
         console.error('Exception saving quiz result:', err);
+        toast.error('Something went wrong');
       } finally {
         setIsSaving(false);
       }
     };
 
-    saveResult();
+    // Only save if user is logged in
+    if (user) {
+      saveResult();
+    }
   }, [selectedLanguages, difficultyLevel, totalQuestions, answers, navigate, user, savedResult]);
 
   const handlePlayAgain = () => {
@@ -104,14 +126,7 @@ const Results = () => {
         <CardContent className="space-y-6 text-center">
           <div className="space-y-2">
             <h2 className="text-2xl font-bold">{score} / {totalQuestions} correct</h2>
-            <div className="w-full bg-gray-200 rounded-full h-4">
-              <div
-                className={`h-4 rounded-full ${
-                  percentage >= 70 ? 'bg-green-500' : percentage >= 40 ? 'bg-yellow-500' : 'bg-red-500'
-                }`}
-                style={{ width: `${percentage}%` }}
-              ></div>
-            </div>
+            <Progress value={percentage} className="h-4" />
             <p className="text-xl font-medium">{percentage}%</p>
           </div>
 
