@@ -34,13 +34,20 @@ export const QuizProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setCurrentQuestionIndex(0);
     setScore(0);
     setAnswers({});
-    // Determine total questions based on difficulty
-    if (difficultyLevel === 'Easy') {
-      setTotalQuestions(5);
-    } else if (difficultyLevel === 'Medium') {
-      setTotalQuestions(10);
-    } else {
-      setTotalQuestions(15);
+    
+    // Set total questions based on difficulty level
+    switch (difficultyLevel) {
+      case 'Easy':
+        setTotalQuestions(5);
+        break;
+      case 'Medium':
+        setTotalQuestions(10);
+        break;
+      case 'Hard':
+        setTotalQuestions(15);
+        break;
+      default:
+        setTotalQuestions(10);
     }
   };
 

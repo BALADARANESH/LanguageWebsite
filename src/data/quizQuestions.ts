@@ -183,22 +183,61 @@ export const getQuestionsForLanguages = (
   difficulty: 'Easy' | 'Medium' | 'Hard',
   count: number
 ) => {
-  // Filter questions by selected languages and difficulty
+  // First get questions matching the exact language and difficulty
   const filteredQuestions = quizQuestions.filter(
     q => languages.includes(q.language) && q.difficulty === difficulty
   );
   
-  // If not enough questions for the requested difficulty, get questions from any difficulty
-  let selectedQuestions = [...filteredQuestions];
-  if (selectedQuestions.length < count) {
-    const anyDifficultyQuestions = quizQuestions.filter(
-      q => languages.includes(q.language) && !selectedQuestions.includes(q)
-    );
-    selectedQuestions = [...selectedQuestions, ...anyDifficultyQuestions];
+  // If we don't have enough questions with the exact difficulty,
+  // we'll fill in with questions from other difficulties
+  if (filteredQuestions.length < count) {
+    console.log(`Not enough ${difficulty} questions for selected languages, getting more questions...`);
+    
+    // Get additional questions from other difficulties if needed
+    // Sort by difficulty so we prefer closer difficulty levels
+    const difficultyOrder = ['Easy', 'Medium', 'Hard'];
+    const currentDifficultyIndex = difficultyOrder.indexOf(difficulty);
+    
+    // Create a priority list of other difficulties based on how close they are to current difficulty
+    const otherDifficulties = difficultyOrder
+      .filter(d => d !== difficulty)
+      .sort((a, b) => {
+        const aDiff = Math.abs(difficultyOrder.indexOf(a) - currentDifficultyIndex);
+        const bDiff = Math.abs(difficultyOrder.indexOf(b) - currentDifficultyIndex);
+        return aDiff - bDiff;
+      });
+    
+    // Try to fill up with questions from other difficulties
+    let selectedQuestions = [...filteredQuestions];
+    let neededCount = count - selectedQuestions.length;
+    
+    for (const otherDifficulty of otherDifficulties) {
+      if (neededCount <= 0) break;
+      
+      const additionalQuestions = quizQuestions
+        .filter(q => 
+          languages.includes(q.language) && 
+          q.difficulty === otherDifficulty &&
+          !selectedQuestions.some(sq => sq.id === q.id)
+        )
+        .sort(() => 0.5 - Math.random()) // Shuffle
+        .slice(0, neededCount);
+      
+      selectedQuestions = [...selectedQuestions, ...additionalQuestions];
+      neededCount = count - selectedQuestions.length;
+      
+      console.log(`Added ${additionalQuestions.length} ${otherDifficulty} questions`);
+    }
+    
+    // Shuffle and return what we have, may be less than the requested count
+    console.log(`Returning ${selectedQuestions.length} total questions (requested ${count})`);
+    return selectedQuestions
+      .sort(() => 0.5 - Math.random())
+      .slice(0, count);
   }
   
-  // Shuffle and limit to requested count
-  return selectedQuestions
+  // If we have enough questions, just shuffle and return the requested number
+  return filteredQuestions
     .sort(() => 0.5 - Math.random())
     .slice(0, count);
 };
