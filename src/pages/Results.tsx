@@ -41,32 +41,28 @@ const Results = () => {
 
     // Count correct answers
     let correctAnswers = 0;
-    let answeredQuestions = 0;
     
     // Debug logging
     console.log('User answers:', answers);
     console.log('Quiz questions:', quizQuestions);
     
+    // First, check each answer against ALL possible questions to find matches
+    // This handles potential question order differences
     Object.entries(answers).forEach(([questionIndexStr, userAnswer]) => {
-      const questionIndex = parseInt(questionIndexStr);
-      if (questionIndex < quizQuestions.length) {
-        const question = quizQuestions[questionIndex];
-        answeredQuestions++;
-        
-        // Debug logs for each answer
-        console.log(`Question ${questionIndex}:`, question.question);
-        console.log(`User answer: "${userAnswer}", Correct answer: "${question.correctAnswer}"`);
-        
-        if (question.correctAnswer === userAnswer) {
-          correctAnswers++;
-          console.log(`Question ${questionIndex} is correct!`);
-        } else {
-          console.log(`Question ${questionIndex} is incorrect.`);
-        }
+      // Find the question in our quiz questions that matches the user's answer
+      const matchingQuestion = quizQuestions.find(q => 
+        q.correctAnswer === userAnswer && 
+        userAnswer !== undefined && 
+        userAnswer !== null
+      );
+      
+      if (matchingQuestion) {
+        correctAnswers++;
+        console.log(`Found correct answer: "${userAnswer}" (${matchingQuestion.question})`);
       }
     });
 
-    console.log('Answered questions:', answeredQuestions, 'out of', totalQuestions);
+    console.log('Total answered questions:', Object.keys(answers).length, 'out of', totalQuestions);
     console.log('Correct answers:', correctAnswers);
     
     // Update state with calculated values
