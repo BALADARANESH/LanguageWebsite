@@ -27,7 +27,7 @@ export const QuizProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [difficultyLevel, setDifficultyLevel] = useState<DifficultyLevel>('Easy');
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [score, setScore] = useState(0);
-  const [totalQuestions, setTotalQuestions] = useState(10);
+  const [totalQuestions, setTotalQuestions] = useState(5);
   const [answers, setAnswers] = useState<Record<number, string>>({});
 
   const startQuiz = () => {
@@ -47,7 +47,7 @@ export const QuizProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setTotalQuestions(15);
         break;
       default:
-        setTotalQuestions(10);
+        setTotalQuestions(5);
     }
   };
 

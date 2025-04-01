@@ -40,34 +40,35 @@ const Results = () => {
     );
 
     // Count correct answers
-    let correctAnswers = 0;
+    let correctCount = 0;
     
-    // Debug logging
-    console.log('User answers:', answers);
-    console.log('Quiz questions:', quizQuestions);
+    // Log for debugging
+    console.log('Total Questions:', totalQuestions);
+    console.log('Retrieved Questions:', quizQuestions.length);
+    console.log('User Answers:', answers);
     
-    // First, check each answer against ALL possible questions to find matches
-    // This handles potential question order differences
+    // Check each answer against the corresponding question
     Object.entries(answers).forEach(([questionIndexStr, userAnswer]) => {
-      // Find the question in our quiz questions that matches the user's answer
-      const matchingQuestion = quizQuestions.find(q => 
-        q.correctAnswer === userAnswer && 
-        userAnswer !== undefined && 
-        userAnswer !== null
-      );
+      const questionIndex = parseInt(questionIndexStr, 10);
       
-      if (matchingQuestion) {
-        correctAnswers++;
-        console.log(`Found correct answer: "${userAnswer}" (${matchingQuestion.question})`);
+      // Make sure we have a question at this index
+      if (questionIndex < quizQuestions.length) {
+        const question = quizQuestions[questionIndex];
+        
+        if (question && question.correctAnswer === userAnswer) {
+          correctCount++;
+          console.log(`Question ${questionIndex} correct: ${userAnswer}`);
+        } else if (question) {
+          console.log(`Question ${questionIndex} incorrect. User: ${userAnswer}, Correct: ${question.correctAnswer}`);
+        }
       }
     });
 
-    console.log('Total answered questions:', Object.keys(answers).length, 'out of', totalQuestions);
-    console.log('Correct answers:', correctAnswers);
+    console.log('Total Answered:', Object.keys(answers).length, 'Correct:', correctCount);
     
     // Update state with calculated values
-    setScore(correctAnswers);
-    const calculatedPercentage = Math.round((correctAnswers / totalQuestions) * 100);
+    setScore(correctCount);
+    const calculatedPercentage = Math.round((correctCount / totalQuestions) * 100);
     setPercentage(calculatedPercentage);
 
     // Save results to Supabase if user is logged in
@@ -82,7 +83,7 @@ const Results = () => {
             user_id: user.id,
             languages: selectedLanguages,
             difficulty: difficultyLevel,
-            score: correctAnswers,
+            score: correctCount,
             total_questions: totalQuestions,
             percentage: calculatedPercentage
           });
