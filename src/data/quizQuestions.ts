@@ -50,6 +50,64 @@ export const quizQuestions: QuizQuestion[] = [
     options: ['திருக்குறள்', 'புறநானூறு', 'சிலப்பதிகாரம்', 'கம்பராமாயணம்'],
     correctAnswer: 'புறநானூறு'
   },
+  // Added new Tamil Medium questions
+  {
+    id: 'tamil-6',
+    language: 'Tamil',
+    difficulty: 'Medium',
+    question: 'தமிழில் \'Computer\' என்று எப்படி அழைக்கப்படுகிறது?',
+    options: ['கணிப்பொறி', 'தொலைபேசி', 'அச்சுப்பொறி', 'மின்சாரம்'],
+    correctAnswer: 'கணிப்பொறி'
+  },
+  {
+    id: 'tamil-7',
+    language: 'Tamil',
+    difficulty: 'Medium',
+    question: 'தமிழில் \'Time\' என்பதற்கான சொல் என்ன?',
+    options: ['நேரம்', 'காலம்', 'நாள்', 'மணி'],
+    correctAnswer: 'நேரம்'
+  },
+  {
+    id: 'tamil-8',
+    language: 'Tamil',
+    difficulty: 'Medium',
+    question: '\'வானம்\' என்ற சொல்லின் ஆங்கில அர்த்தம் என்ன?',
+    options: ['Earth', 'Sky', 'Ocean', 'Mountain'],
+    correctAnswer: 'Sky'
+  },
+  // Added new Tamil Hard questions
+  {
+    id: 'tamil-9',
+    language: 'Tamil',
+    difficulty: 'Hard',
+    question: 'தமிழ் மொழியின் மிகப் பழமையான இலக்கண நூல்?',
+    options: ['தொல்காப்பியம்', 'நன்னூல்', 'அகத்தியம்', 'வீரசோழியம்'],
+    correctAnswer: 'தொல்காப்பியம்'
+  },
+  {
+    id: 'tamil-10',
+    language: 'Tamil',
+    difficulty: 'Hard',
+    question: 'தமிழில் எத்தனை எழுத்துக்கள் உள்ளன?',
+    options: ['247', '216', '230', '247'],
+    correctAnswer: '247'
+  },
+  {
+    id: 'tamil-11',
+    language: 'Tamil',
+    difficulty: 'Hard',
+    question: 'கம்பராமாயணத்தை இயற்றியவர் யார்?',
+    options: ['கம்பர்', 'இளங்கோ அடிகள்', 'திருவள்ளுவர்', 'அவ்வையார்'],
+    correctAnswer: 'கம்பர்'
+  },
+  {
+    id: 'tamil-12',
+    language: 'Tamil',
+    difficulty: 'Hard',
+    question: 'தமிழக மாநில பறவை எது?',
+    options: ['மயில்', 'குயில்', 'கிளி', 'காகம்'],
+    correctAnswer: 'மயில்'
+  },
   
   // Hindi questions
   {
@@ -91,6 +149,64 @@ export const quizQuestions: QuizQuestion[] = [
     question: '\'सत्यमेव जयते\' का क्या अर्थ है?',
     options: ['सच्चाई की जीत होती है', 'हिम्मत से काम लो', 'भगवान सब देखता है', 'जीवन एक संघर्ष है'],
     correctAnswer: 'सच्चाई की जीत होती है'
+  },
+  // Added new Hindi Medium questions
+  {
+    id: 'hindi-6',
+    language: 'Hindi',
+    difficulty: 'Medium',
+    question: 'हिंदी में \'Computer\' क्या कहलाता है?',
+    options: ['संगणक', 'दूरभाष', 'मुद्रक', 'विद्युत'],
+    correctAnswer: 'संगणक'
+  },
+  {
+    id: 'hindi-7',
+    language: 'Hindi',
+    difficulty: 'Medium',
+    question: '\'रात\' का विलोम शब्द क्या है?',
+    options: ['दिन', 'सुबह', 'शाम', 'दोपहर'],
+    correctAnswer: 'दिन'
+  },
+  {
+    id: 'hindi-8',
+    language: 'Hindi',
+    difficulty: 'Medium',
+    question: 'हिंदी में \'Book\' को क्या कहते हैं?',
+    options: ['किताब', 'पत्र', 'कलम', 'पेंसिल'],
+    correctAnswer: 'किताब'
+  },
+  // Added new Hindi Hard questions
+  {
+    id: 'hindi-9',
+    language: 'Hindi',
+    difficulty: 'Hard',
+    question: 'हिंदी किस भाषा परिवार से संबंधित है?',
+    options: ['इंडो-आर्यन', 'द्रविड़', 'ऑस्ट्रो-एशियाटिक', 'सिनो-तिब्बती'],
+    correctAnswer: 'इंडो-आर्यन'
+  },
+  {
+    id: 'hindi-10',
+    language: 'Hindi',
+    difficulty: 'Hard',
+    question: 'भारत का राष्ट्रीय गीत क्या है?',
+    options: ['वंदे मातरम्', 'जन गण मन', 'ऐ मेरे वतन के लोगों', 'सारे जहां से अच्छा'],
+    correctAnswer: 'वंदे मातरम्'
+  },
+  {
+    id: 'hindi-11',
+    language: 'Hindi',
+    difficulty: 'Hard',
+    question: 'हिंदी दिवस कब मनाया जाता है?',
+    options: ['14 सितंबर', '26 जनवरी', '15 अगस्त', '2 अक्टूबर'],
+    correctAnswer: '14 सितंबर'
+  },
+  {
+    id: 'hindi-12',
+    language: 'Hindi',
+    difficulty: 'Hard',
+    question: '\'प्रेमचंद\' का असली नाम क्या था?',
+    options: ['धनपत राय', 'हरिवंश राय', 'सूर्यकांत त्रिपाठी', 'अमृतलाल नागर'],
+    correctAnswer: 'धनपत राय'
   },
   
   // Malayalam questions
@@ -134,6 +250,64 @@ export const quizQuestions: QuizQuestion[] = [
     options: ['മയില്‍', 'കാക്ക', 'തത്ത', 'ഗ്രേറ്റ് ഹോണ്‍ബില്‍'],
     correctAnswer: 'ഗ്രേറ്റ് ഹോണ്‍ബില്‍'
   },
+  // Added new Malayalam Medium questions
+  {
+    id: 'malayalam-6',
+    language: 'Malayalam',
+    difficulty: 'Medium',
+    question: 'മലയാളത്തില്‍ \'Computer\' എന്ന് എങ്ങനെ വിളിക്കുന്നു?',
+    options: ['കമ്പ്യൂട്ടര്‍', 'ഗണകയന്ത്രം', 'ടെലിഫോണ്‍', 'പ്രിന്റര്‍'],
+    correctAnswer: 'ഗണകയന്ത്രം'
+  },
+  {
+    id: 'malayalam-7',
+    language: 'Malayalam',
+    difficulty: 'Medium',
+    question: '\'സ്നേഹം\' എന്ന വാക്കിന്‍റെ ഇംഗ്ലീഷ് എന്താണ്?',
+    options: ['Hate', 'Love', 'Friend', 'Family'],
+    correctAnswer: 'Love'
+  },
+  {
+    id: 'malayalam-8',
+    language: 'Malayalam',
+    difficulty: 'Medium',
+    question: 'മലയാളത്തില്‍ \'Sky\' എന്നാല്‍ എന്ത്?',
+    options: ['കടല്‍', 'ആകാശം', 'ഭൂമി', 'പര്‍വതം'],
+    correctAnswer: 'ആകാശം'
+  },
+  // Added new Malayalam Hard questions
+  {
+    id: 'malayalam-9',
+    language: 'Malayalam',
+    difficulty: 'Hard',
+    question: 'മലയാളത്തിലെ ആദ്യത്തെ നോവല്‍ ഏതാണ്?',
+    options: ['ഇന്ദുലേഖ', 'ശാകുന്തളം', 'കുന്ദലത', 'രണ്ടു വീടുകള്‍'],
+    correctAnswer: 'ഇന്ദുലേഖ'
+  },
+  {
+    id: 'malayalam-10',
+    language: 'Malayalam',
+    difficulty: 'Hard',
+    question: 'കേരള സംസ്ഥാനം രൂപീകരിച്ചത് എന്നാണ്?',
+    options: ['1947', '1950', '1956', '1960'],
+    correctAnswer: '1956'
+  },
+  {
+    id: 'malayalam-11',
+    language: 'Malayalam',
+    difficulty: 'Hard',
+    question: 'മലയാളത്തിലെ ആദ്യത്തെ സിനിമ ഏതാണ്?',
+    options: ['ബാലന്‍', 'വിഗതകുമാരന്‍', 'മാര്‍ത്താണ്ഡ വര്‍മ്മ', 'നീലക്കുയില്‍'],
+    correctAnswer: 'വിഗതകുമാരന്‍'
+  },
+  {
+    id: 'malayalam-12',
+    language: 'Malayalam',
+    difficulty: 'Hard',
+    question: 'കേരളത്തിന്റെ സംസ്ഥാന മൃഗം ഏതാണ്?',
+    options: ['ആന', 'കടുവ', 'സിംഹം', 'പുലി'],
+    correctAnswer: 'ആന'
+  },
   
   // English questions
   {
@@ -174,6 +348,64 @@ export const quizQuestions: QuizQuestion[] = [
     difficulty: 'Hard',
     question: 'Which ancient language is considered the oldest in India that is still in use?',
     options: ['Sanskrit', 'Tamil', 'Pali', 'Prakrit'],
+    correctAnswer: 'Tamil'
+  },
+  // Added new English Medium questions
+  {
+    id: 'english-6',
+    language: 'English',
+    difficulty: 'Medium',
+    question: 'How many official languages are recognized in the Indian constitution?',
+    options: ['15', '18', '22', '29'],
+    correctAnswer: '22'
+  },
+  {
+    id: 'english-7',
+    language: 'English',
+    difficulty: 'Medium',
+    question: 'Which Indian language has the most native speakers?',
+    options: ['Hindi', 'Bengali', 'Telugu', 'Tamil'],
+    correctAnswer: 'Hindi'
+  },
+  {
+    id: 'english-8',
+    language: 'English',
+    difficulty: 'Medium',
+    question: 'Which script is used to write Malayalam?',
+    options: ['Devanagari', 'Malayalam script', 'Tamil script', 'Perso-Arabic script'],
+    correctAnswer: 'Malayalam script'
+  },
+  // Added new English Hard questions
+  {
+    id: 'english-9',
+    language: 'English',
+    difficulty: 'Hard',
+    question: 'In which year was Hindi declared as the official language of India?',
+    options: ['1947', '1949', '1950', '1965'],
+    correctAnswer: '1949'
+  },
+  {
+    id: 'english-10',
+    language: 'English',
+    difficulty: 'Hard',
+    question: 'Which of these languages does NOT belong to the Indo-European language family?',
+    options: ['Hindi', 'Bengali', 'Tamil', 'Marathi'],
+    correctAnswer: 'Tamil'
+  },
+  {
+    id: 'english-11',
+    language: 'English',
+    difficulty: 'Hard',
+    question: 'Which famous text was translated from Sanskrit to Tamil, Malayalam, and other South Indian languages?',
+    options: ['Ramayana', 'Mahabharata', 'Bhagavad Gita', 'Upanishads'],
+    correctAnswer: 'Ramayana'
+  },
+  {
+    id: 'english-12',
+    language: 'English',
+    difficulty: 'Hard',
+    question: 'Which Indian language has the oldest literary tradition?',
+    options: ['Hindi', 'Sanskrit', 'Tamil', 'Malayalam'],
     correctAnswer: 'Tamil'
   }
 ];
