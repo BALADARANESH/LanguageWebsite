@@ -5,6 +5,9 @@ import { useQuiz } from '@/context/QuizContext';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { QuizQuestion, getQuestionsForLanguages } from '@/data/quizQuestions';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { toast } from 'sonner';
+import { Skeleton } from '@/components/ui/skeleton';
 
 const Quiz = () => {
   const {
@@ -20,6 +23,7 @@ const Quiz = () => {
   const [questions, setQuestions] = useState<QuizQuestion[]>([]);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [isAnswered, setIsAnswered] = useState(false);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   // Load the user's previous answer for this question if it exists
@@ -34,18 +38,34 @@ const Quiz = () => {
   }, [currentQuestionIndex, answers]);
 
   useEffect(() => {
+    setLoading(true);
+    
     if (selectedLanguages.length === 0) {
       navigate('/dashboard');
       return;
     }
     
-    const quizQuestions = getQuestionsForLanguages(
-      selectedLanguages,
-      difficultyLevel,
-      totalQuestions
-    );
-    
-    setQuestions(quizQuestions);
+    try {
+      const quizQuestions = getQuestionsForLanguages(
+        selectedLanguages,
+        difficultyLevel,
+        totalQuestions
+      );
+      
+      if (quizQuestions.length === 0) {
+        toast.error("No questions available for the selected criteria");
+        navigate('/dashboard');
+        return;
+      }
+      
+      console.log(`Loaded ${quizQuestions.length} questions for ${difficultyLevel} difficulty`);
+      setQuestions(quizQuestions);
+    } catch (error) {
+      console.error("Error loading questions:", error);
+      toast.error("Failed to load quiz questions");
+    } finally {
+      setLoading(false);
+    }
   }, [selectedLanguages, difficultyLevel, totalQuestions, navigate]);
 
   const currentQuestion = questions[currentQuestionIndex];
@@ -74,16 +94,49 @@ const Quiz = () => {
     navigate('/results');
   };
 
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-white flex flex-col items-center justify-center p-4">
+        <Card className="w-full max-w-2xl border border-quiz-lightgray">
+          <CardHeader className="text-center">
+            <CardTitle className="text-2xl font-bold text-quiz-green">Loading Quiz</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <Skeleton className="w-full h-6 mb-4" />
+            <div className="space-y-3">
+              {[1, 2, 3, 4].map((i) => (
+                <Skeleton key={i} className="w-full h-12" />
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
   if (!currentQuestion) {
     return (
       <div className="min-h-screen bg-white flex items-center justify-center">
-        <p>Loading questions...</p>
+        <Card className="w-full max-w-md">
+          <CardContent className="p-6">
+            <p className="text-center">No questions available for the selected criteria.</p>
+            <Button 
+              className="w-full mt-4 bg-quiz-green hover:bg-quiz-lightgreen text-white"
+              onClick={() => navigate('/dashboard')}
+            >
+              Return to Dashboard
+            </Button>
+          </CardContent>
+        </Card>
       </div>
     );
   }
 
   // Calculate progress
   const progress = Math.round(((currentQuestionIndex + 1) / totalQuestions) * 100);
+  
+  // Check if the selected answer is correct
+  const isCorrect = selectedAnswer === currentQuestion.correctAnswer;
 
   return (
     <div className="min-h-screen bg-white flex flex-col items-center justify-center p-4">
@@ -126,6 +179,14 @@ const Quiz = () => {
                 </Button>
               ))}
             </div>
+            
+            {isAnswered && !isCorrect && (
+              <Alert className="mt-4 bg-yellow-50 border-yellow-200">
+                <AlertDescription>
+                  <span className="font-medium">Correct answer:</span> {currentQuestion.correctAnswer}
+                </AlertDescription>
+              </Alert>
+            )}
             
             <div className="mt-6 flex justify-between">
               {isAnswered && (
